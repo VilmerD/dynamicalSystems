@@ -17,11 +17,15 @@ xlim(end)
 %% Q4
 fmu = @(x, mu) mu*x*(1 - x);
 
-n = 1000;
+%% Bifurcations
+n = 2000;
 nmin = 200;
 mumin = 2;
 mumax = 4;
-mus = linspace(mumin, mumax, 10000);
+xx = linspace(0, 1, n);
+p = 2;
+essq = (xx).^(1/p).*(exp(mumax) - exp(mumin)) + exp(mumin);
+mus = log(essq);
 
 % Iterate for different mus
 f = figure();
@@ -42,6 +46,41 @@ for k = 1:numel(mus)
     plot(ax, muk*ones(1, numel(yn)), yn, 'k.');
     drawnow();
 end
+
+%% numbers
+n = 1000;
+nmin = 200;
+muhw = [2 2.9 3.1 3.5 3.72 3.83];
+Y = zeros(1, numel(muhw));
+for i = 1:numel(muhw)
+    muk = muhw(i);
+    X = fpi(@(x) fmu(x, muk), 0.5, n + nmin);
+    
+    % Find unique elements
+    yn = uniqueX(X(nmin:end));
+    Y(i) = numel(yn);
+    fprintf('mu = %1.2f number unique %i \n', muk, numel(yn));
+end
+
+%% plot
+n = 2000;
+f = figure();
+t = tiledlayout(3, 1);
+muplot = [2 3.5 3.72];
+iplot = 240:270;
+for j = 1:numel(muplot)
+    ax = nexttile;
+    axis(ax, [iplot(1) iplot(end) 0 1]);
+    hold(ax, 'ON');
+    muk = muplot(j);
+    X = fpi(@(x) fmu(x, muk), 0.5, n);
+    
+    plot(ax, iplot, X(iplot));
+    titj = sprintf('$\\mu = %1.2f$', muk);
+    title(ax, titj, 'Interpreter', 'Latex');
+end
+xlabel(t, 'iterate number');
+ylabel(t, 'x');
 %% Q5
 L = [-1 0 1];
 xx = -4:1:4;
