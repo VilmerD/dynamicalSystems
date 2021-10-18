@@ -3,7 +3,7 @@ F = @(x, a, b) [1 + x(2) - a*x(1)^2; b*x(1)];
 
 %% Q2
 b = 0.3;
-na = 400;
+na = 200;
 a = linspace(0, 3, na);
 nsteps = 300;
 
