@@ -16,4 +16,20 @@ Z = h(X, Y);
 quiver(X, Y, px, py);
 axis image
 
-%% Hyperbolic dynamics
+%% Centerfold dynamics
+xhatdot= @(x,y) [-(10*x.*y^4-3*x.*y.^3+(20*x.^3-3*x.^2+10*x).*y.^2+(10-6*x.^3).*y+10*x.^5+6*x.^4+10*x.^3)/10;
+-((10*x+10).*y.^5+(-3*x-3).*y.^4+(20*x.^3+17*x.^2+7*x+10).*y.^3+(-6*x.^3-6*x.^2).*y.^2+(10*x.^5+6*x.^4+6*x.^3+10*x.^2).*y-10*x)/10];
+
+xmax = 1e0;
+Nx = 51     ;
+xx = linspace(-xmax, xmax, Nx);
+yy = xx;
+[X, Y] = meshgrid(xx, yy);
+Z = xhatdot(X, Y);
+px = Z(1:Nx,            :);
+py = Z((Nx + 1):end,    :);
+N = sqrt(px.^2 + py.^2);
+quiver(X, Y, px./N, py./N);
+axis image
+xlabel('x');
+ylabel('y');
